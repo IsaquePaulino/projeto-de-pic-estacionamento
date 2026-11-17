@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "camera": {
+    "capture_path": "/capture",
+    "poll_interval_seconds": 0.5,
+    "request_timeout_seconds": 2.0,
+    "stale_after_seconds": 5.0,
+    "max_frame_bytes": 2000000,
+    "preview_interval_seconds": 0.1
+  },
+  "detection": {
+    "enabled": true,
+    "reference_image": "data/reference/empty.jpg",
+    "gaussian_blur_kernel": 5,
+    "pixel_difference_threshold": 25,
+    "free_max_changed_ratio": 0.29,
+    "occupied_min_changed_ratio": 0.3,
+    "confirmation_frames": 1,
+    "max_global_changed_ratio": 0.65,
+    "max_illumination_shift": 45.0,
+    "chromatic_difference_threshold": 12.0,
+    "min_color_changed_ratio": 0.06,
+    "min_new_edge_ratio": 0.012,
+    "max_camera_shift_pixels": 3.0,
+    "analysis_interval_seconds": 0.3
+  },
+  "leds": {
+    "command_path": "/leds",
+    "heartbeat_seconds": 2.0,
+    "command_timeout_seconds": 5.0,
+    "colors": {
+      "free": [
+        0,
+        255,
+        0
+      ],
+      "occupied": [
+        255,
+        0,
+        0
+      ],
+      "unknown": [
+        255,
+        180,
+        0
+      ]
+    }
+  },
+  "frontend": {
+    "poll_interval_seconds": 1.0,
+    "stale_after_seconds": 5.0
+  }
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projeto de PIC Estacionamento</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">P</span><span>Projeto de PIC Estacionamento<small>Laboratório de ocupação</small></span></a>
+    <span class="connection" id="connection">Conectando ao computador</span>
+  </header>
+  <main>
+    <div class="heading">
+      <div><p class="eyebrow">ESP32-CAM + OPENCV</p><h1>Veja a vaga. Teste a ocupação.</h1><p class="intro">Imagem contínua e comparação com uma referência vazia, processadas neste computador.</p></div>
+      <span class="mode-tag">LEDs em simulação</span>
+    </div>
+    <section class="counters" aria-label="Resumo das vagas">
+      <div><span>Total</span><strong id="count-total">—</strong></div>
+      <div class="free"><span>Livres</span><strong id="count-free">—</strong></div>
+      <div class="occupied"><span>Ocupadas</span><strong id="count-occupied">—</strong></div>
+      <div class="unknown"><span>Desconhecidas</span><strong id="count-unknown">—</strong></div>
+    </section>
+    <div class="layout">
+      <div>
+        <section class="card video-card">
+          <div class="card-header"><div><h2>Câmera ao vivo</h2><span id="video-info">Aguardando imagem</span></div><span class="live-tag" id="live-tag">SEM SINAL</span></div>
+          <div class="camera-stage" id="camera-stage">
+            <img id="camera-image" alt="Imagem da câmera do estacionamento" hidden>
+            <svg id="regions" viewBox="0 0 1 1" preserveAspectRatio="none" aria-label="Regiões das vagas"></svg>
+            <div class="camera-message" id="camera-message"><span class="camera-symbol">▣</span><strong>Aguardando a câmera</strong><span>O vídeo começa assim que uma imagem chegar.</span></div>
+            <span class="selection-hint" id="selection-hint" hidden>Selecione os 4 cantos da vaga</span>
+          </div>
+          <div class="video-footer"><span id="camera-origin">Fonte ainda não conectada</span><a href="/api/video" target="_blank" rel="noopener">Abrir só o vídeo ↗</a></div>
+        </section>
+        <section class="card monitored">
+          <div class="card-header"><h2>Vagas monitoradas</h2><span id="calibrated-count">Nenhuma região selecionada</span></div>
+          <div id="spots" class="spots" aria-live="polite"></div>
+        </section>
+        <p class="method-note">O teste mede ocupação na região selecionada. Ele não identifica a categoria do objeto: um carro, uma mão ou outro objeto podem alterar a leitura.</p>
+      </div>
+      <aside>
+        <section class="card setup-card">
+          <p class="eyebrow">PREPARAR O TESTE</p><h2>Comece por uma vaga</h2>
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content"><h3>Selecione a região</h3><p>Congele uma imagem e clique nos quatro cantos da vaga. O contorno é organizado automaticamente.</p>
+              <label for="spot-select">Vaga</label><select id="spot-select" aria-label="Vaga para calibrar"></select>
+              <button id="select-region" class="secondary" disabled>Selecionar região na imagem</button>
+              <div id="selection-controls" hidden>
+                <span class="point-counter" id="point-counter">0 de 4 pontos</span>
+                <button id="undo-point" class="text-button">Remover último ponto</button>
+                <button id="save-region" class="primary" disabled>Salvar região</button>
+                <button id="cancel-region" class="text-button">Voltar ao vídeo</button>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content"><h3>Guarde a imagem vazia</h3><p>Retire os carros das regiões calibradas antes de criar a referência.</p>
+              <label class="checkbox"><input type="checkbox" id="confirm-empty"><span>As regiões calibradas estão vazias</span></label>
+              <button id="save-reference" class="secondary" disabled>Capturar referência vazia</button>
+              <span class="reference-status" id="reference-status">Referência ainda não capturada</span>
+            </div>
+          </div>
+          <div class="step last">
+            <span class="step-number">3</span>
+            <div class="step-content"><h3>Coloque o carro e observe</h3><p>A leitura muda após capturas consecutivas. Resultados ambíguos ficam desconhecidos.</p>
+              <button id="toggle-analysis" class="primary" disabled>Iniciar análise</button>
+            </div>
+          </div>
+          <div class="notice" id="notice" role="status" aria-live="polite">Selecione uma região para começar.</div>
+        </section>
+        <details class="card adjustments">
+          <summary>Ajustar a sensibilidade</summary>
+          <p>Valores iniciais precisam de ensaios com a maquete e sua iluminação.</p>
+          <form id="settings-form">
+            <label for="pixel-threshold">Diferença de intensidade (1–254)</label><input id="pixel-threshold" type="number" min="1" max="254" required>
+            <div class="form-row"><div><label for="free-threshold">Livre até (%)</label><input id="free-threshold" type="number" min="0" max="99" step="0.1" required></div><div><label for="occupied-threshold">Ocupada a partir (%)</label><input id="occupied-threshold" type="number" min="0.1" max="100" step="0.1" required></div></div>
+            <label for="confirmation-frames">Capturas para confirmar</label><input id="confirmation-frames" type="number" min="1" max="50" required>
+            <button class="secondary" type="submit">Salvar ajustes</button>
+          </form>
+        </details>
+      </aside>
+    </div>
+    <footer class="page-footer"><span>Processamento local · Sem IA · Sem nuvem</span><span>Referência vazia + regiões calibradas + confirmação temporal</span></footer>
+  </main>
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

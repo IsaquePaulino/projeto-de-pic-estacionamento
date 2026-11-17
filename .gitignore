@@ -1,0 +1,39 @@
+# Segredos e configuracoes locais
+.env
+.env.*
+!.env.example
+**/config.local.h
+*.pem
+*.key
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+*.bin
+*.elf
+
+# Dados e capturas reais
+data/*
+!data/.gitkeep
+*.log
+*.tmp
+
+# Ferramentas e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
